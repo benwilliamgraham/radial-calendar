@@ -43,18 +43,28 @@ function main() {
     for (var i = 1; i <= 12; i++) {
         const daysInMonth = new Date(year, i, 0).getDate();
         const angle = (elapsedDays / totalDaysInYear) * 2 * Math.PI;
+        const centerAngle = ((elapsedDays + daysInMonth / 2) / totalDaysInYear) * 2 * Math.PI;
+
+        // draw month divider
         context.beginPath();
         context.moveTo(canvas.width / 2, canvas.height / 2);
-        context.lineTo(canvas.width / 2 + diameter / 2 * Math.cos(angle), canvas.height / 2 + diameter / 2 * Math.sin(angle));
+        context.lineTo(canvas.width / 2 + diameter / 2 * Math.sin(angle), canvas.height / 2 + diameter / 2 * Math.cos(angle));
         context.stroke();
+
+        // add month label
+        context.font = 'bold 20px sans-serif';
+        context.textAlign = 'center';
+        context.textBaseline = 'middle';
+        const monthLabelString = new Date(year, i - 1, 1).toLocaleString('default', { month: 'short' });
+        context.fillText(monthLabelString, canvas.width / 2 + diameter / 5 * Math.sin(centerAngle), canvas.height / 2 + diameter / 5 * Math.cos(centerAngle));
 
         // add days
         for (var j = 1; j <= daysInMonth; j++) {
             const dayAngle = ((elapsedDays + j) / totalDaysInYear) * 2 * Math.PI;
             const dayRadius = diameter / 4;
             context.beginPath();
-            context.moveTo(canvas.width / 2 + dayRadius * Math.cos(dayAngle), canvas.height / 2 + dayRadius * Math.sin(dayAngle));
-            context.lineTo(canvas.width / 2 + diameter / 2 * Math.cos(dayAngle), canvas.height / 2 + diameter / 2 * Math.sin(dayAngle));
+            context.moveTo(canvas.width / 2 + dayRadius * Math.sin(dayAngle), canvas.height / 2 + dayRadius * Math.cos(dayAngle));
+            context.lineTo(canvas.width / 2 + diameter / 2 * Math.sin(dayAngle), canvas.height / 2 + diameter / 2 * Math.cos(dayAngle));
             context.stroke();
         }
 
